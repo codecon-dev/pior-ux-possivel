@@ -76,9 +76,11 @@ O objetivo é demonstrar, através do humor, o que **NÃO** fazer em UX/UI Desig
 Gostou do conteúdo? Apoie nossos projetos!
 
 **Codecon PRO** - Apenas R$ 15/mês
-- Acesso a eventos exclusivos
-- Conteúdos premium
-- Comunidade ativa de desenvolvedores
+- Crachá especial na Codecon Summit
+- Acesso ao nosso grupo secreto no WhatsApp ou Discord
+- Acompanhe os bastidores: planejamento, ideias e conversas de quem constrói junto
+- Receba nossa newsletter todas as semanas
+- Acesso ao tema da Codecon para VSCode
 
 [Saiba mais sobre a Codecon PRO](https://codecon.dev/pro)
 
