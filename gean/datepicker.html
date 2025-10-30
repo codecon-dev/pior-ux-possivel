@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Pior Datepicker do Mundo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f, #c44569, #786fa6, #4b6584);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: rotate(-1deg);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f, #c44569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            padding: 30px;
+            border-radius: 20px;
+            border: 5px dashed #e17055;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .result h2 {
+            color: #d63031;
+            margin-bottom: 10px;
+        }
+
+        .result .date {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2d3436;
+            font-family: monospace;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h3 {
+            color: #2d3436;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 4px solid #a29bfe;
+            border-radius: 15px;
+            background: #dfe6e9;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .dice-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .dice {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .dice:hover {
+            transform: scale(1.05);
+        }
+
+        .dice-inner {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border-radius: 20px;
+            transform: rotate(45deg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .dice-number {
+            position: absolute;
+            inset: 10px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .dice-number span {
+            font-size: 4em;
+            font-weight: bold;
+            color: #d63031;
+        }
+
+        .dice.rolling {
+            animation: spin 2s linear;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        .roll-button {
+            padding: 20px 40px;
+            font-size: 1.3em;
+            background: #d63031;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .roll-button:hover:not(:disabled) {
+            background: #e17055;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .roll-button:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
+        }
+
+        .month-result {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2d3436;
+            background: #fab1a0;
+            padding: 15px 30px;
+            border-radius: 15px;
+        }
+
+        .warning {
+            background: #dfe6e9;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: #636e72;
+            margin-top: 30px;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🗓️ O Pior Datepicker do Mundo™</h1>
+
+        <div class="result">
+            <h2>Data Selecionada:</h2>
+            <div class="date" id="selectedDate">??/??/????</div>
+        </div>
+
+        <div class="section">
+            <h3>📝 Passo 1: Escolha o Dia (em ordem alfabética 😈)</h3>
+            <select id="daySelect">
+                <option value="">Selecione um dia...</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <h3>🎲 Passo 2: Role o D12 para o Mês</h3>
+            <div class="dice-container">
+                <div class="dice" id="dice">
+                    <div class="dice-inner"></div>
+                    <div class="dice-number">
+                        <span id="diceNumber">?</span>
+                    </div>
+                </div>
+                <button class="roll-button" id="rollButton">🎲 Rolar D12</button>
+                <div class="month-result" id="monthResult" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>🏛️ Passo 3: Descubra o Ano pelos Eventos Históricos</h3>
+            <select id="yearSelect">
+                <option value="">Escolha o ano pelo que aconteceu...</option>
+            </select>
+        </div>
+
+        <div class="warning">
+            ⚠️ Aviso: Este é intencionalmente o pior datepicker já criado. Nunca use isso em produção! 😅
+        </div>
+    </div>
+
+    <script>
+        const days = [
+            'Cinco', 'Dezenove', 'Dezoito', 'Dezesseis', 'Dezessete',
+            'Dez', 'Doze', 'Dois', 'Nove', 'Oito', 'Onze',
+            'Quatorze', 'Quatro', 'Quinze', 'Seis', 'Sete',
+            'Treze', 'Tres', 'Trinta e Um', 'Trinta', 'Vinte e Cinco',
+            'Vinte e Dois', 'Vinte e Nove', 'Vinte e Oito', 'Vinte e Quatro',
+            'Vinte e Seis', 'Vinte e Sete', 'Vinte e Tres', 'Vinte e Um', 'Vinte', 'Um'
+        ];
+
+        const dayToNumber = {
+            'Um': 1, 'Dois': 2, 'Tres': 3, 'Quatro': 4, 'Cinco': 5,
+            'Seis': 6, 'Sete': 7, 'Oito': 8, 'Nove': 9, 'Dez': 10,
+            'Onze': 11, 'Doze': 12, 'Treze': 13, 'Quatorze': 14, 'Quinze': 15,
+            'Dezesseis': 16, 'Dezessete': 17, 'Dezoito': 18, 'Dezenove': 19, 'Vinte': 20,
+            'Vinte e Um': 21, 'Vinte e Dois': 22, 'Vinte e Tres': 23, 'Vinte e Quatro': 24,
+            'Vinte e Cinco': 25, 'Vinte e Seis': 26, 'Vinte e Sete': 27, 'Vinte e Oito': 28,
+            'Vinte e Nove': 29, 'Trinta': 30, 'Trinta e Um': 31
+        };
+
+        const months = [
+            'Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+
+        const historicalYears = {
+            1990: 'Queda do Muro de Berlim (acabou de acontecer) | Fim da Guerra Fria',
+            1991: 'World Wide Web se torna publico | Uniao Sovietica acaba',
+            1992: 'Dream Team nas Olimpiadas | Windows 3.1 lancado',
+            1993: 'Jurassic Park nos cinemas | Pentium lancado pela Intel',
+            1994: 'Brasil tetra na Copa | PlayStation original lancado',
+            1995: 'Windows 95 revoluciona PCs | DVD inventado',
+            1996: 'Ovelha Dolly clonada | Nintendo 64 lancado',
+            1997: 'Princesa Diana morre | Tamagotchi febre mundial',
+            1998: 'Franca campeao mundial | Google fundado',
+            1999: 'Matrix estreia | Napster muda a musica',
+            2000: 'Bug do Milenio nao destruiu o mundo | PlayStation 2 lancado',
+            2001: 'Atentado 11 de setembro | Wikipedia criada',
+            2002: 'Brasil penta na Copa | Euro se torna moeda fisica',
+            2003: 'Genoma humano mapeado | MySpace domina redes sociais',
+            2004: 'Facebook lancado | Tsunami devastador na Asia',
+            2005: 'YouTube criado | Hurricane Katrina',
+            2006: 'Twitter lancado | Plutao deixa de ser planeta',
+            2007: 'Primeiro iPhone | Harry Potter termina',
+            2008: 'Crise financeira global | Bitcoin criado',
+            2009: 'Obama presidente dos EUA | Gripe H1N1 pandemia',
+            2010: 'Espanha campeao mundial | iPad lancado',
+            2011: 'Casamento real William e Kate | Steve Jobs falece',
+            2012: 'Mundo nao acabou (calendario maia) | Gangnam Style viral',
+            2013: 'Principe George nasce | Edward Snowden vazamentos NSA',
+            2014: 'Alemanha campeao na Copa no Brasil | Ebola surto',
+            2015: 'Casamento gay legalizado nos EUA | Emojis explodem',
+            2016: 'Pokemon GO dominou as ruas | Brexit e Trump eleito',
+            2017: 'Furacoes Harvey e Irma | Bitcoin atinge 20 mil dolares',
+            2018: 'Franca bicampeao mundial | GDPR entra em vigor',
+            2019: 'Incendio na Notre-Dame | Buraco negro fotografado',
+            2020: 'Pandemia COVID-19 mudou o mundo | Lockdowns globais',
+            2021: 'Ano das vacinas COVID | NFTs explodem',
+            2022: 'Guerra na Ucrania | Rainha Elizabeth II falece',
+            2023: 'IA generativa revoluciona tudo | ChatGPT viral',
+            2024: 'Olimpiadas de Paris | Ano de eleicoes globais'
+        };
+
+        let selectedDay = '';
+        let selectedMonth = null;
+        let selectedYear = null;
+
+        const daySelect = document.getElementById('daySelect');
+        days.forEach(function (day) {
+            const option = document.createElement('option');
+            option.value = day;
+            option.textContent = day;
+            daySelect.appendChild(option);
+        });
+
+        daySelect.addEventListener('change', function (e) {
+            selectedDay = e.target.value;
+            updateDate();
+        });
+
+        const dice = document.getElementById('dice');
+        const diceNumber = document.getElementById('diceNumber');
+        const rollButton = document.getElementById('rollButton');
+        const monthResult = document.getElementById('monthResult');
+
+        rollButton.addEventListener('click', function () {
+            rollButton.disabled = true;
+            dice.classList.add('rolling');
+
+            let counter = 0;
+            const interval = setInterval(function () {
+                const random = Math.floor(Math.random() * 12) + 1;
+                diceNumber.textContent = random;
+                counter++;
+
+                if (counter > 20) {
+                    clearInterval(interval);
+                    const finalMonth = Math.floor(Math.random() * 12);
+                    selectedMonth = finalMonth;
+                    diceNumber.textContent = finalMonth + 1;
+                    monthResult.textContent = months[finalMonth];
+                    monthResult.style.display = 'block';
+                    dice.classList.remove('rolling');
+                    rollButton.disabled = false;
+                    updateDate();
+                }
+            }, 100);
+        });
+
+        const yearSelect = document.getElementById('yearSelect');
+        const years = Object.keys(historicalYears);
+        for (let i = years.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = years[i];
+            years[i] = years[j];
+            years[j] = temp;
+        }
+        years.forEach(function (year) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = historicalYears[year];
+            yearSelect.appendChild(option);
+        });
+
+        yearSelect.addEventListener('change', function (e) {
+            selectedYear = e.target.value;
+            updateDate();
+        });
+
+        function updateDate() {
+            const dateDisplay = document.getElementById('selectedDate');
+            if (selectedDay && selectedMonth !== null && selectedYear) {
+                const day = dayToNumber[selectedDay];
+                const month = selectedMonth + 1;
+                dateDisplay.textContent = day + '/' + month + '/' + selectedYear;
+            } else {
+                dateDisplay.textContent = '??/??/????';
+            }
+        }
+    </script>
+</body>
+
+</html>

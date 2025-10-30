@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excluir Conta — ISO-9999</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            color: #1a202c;
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        p {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            margin-bottom: 10px;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+
+        .alert {
+            background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(245, 101, 101, 0.3);
+        }
+
+        .coupon-box {
+            background: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%);
+            padding: 24px;
+            border-radius: 16px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(246, 173, 85, 0.3);
+        }
+
+        .coupon-code {
+            background: white;
+            color: #d69e2e;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 20px;
+            display: inline-block;
+            margin: 12px 0;
+            letter-spacing: 1px;
+        }
+
+        .captcha {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .captcha:hover {
+            border-color: #667eea;
+        }
+
+        .captcha-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .captcha-checkbox.checked {
+            background: #48bb78;
+            border-color: #48bb78;
+            color: white;
+        }
+
+        .countdown {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+        }
+
+        .countdown-time {
+            font-size: 36px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            margin: 10px 0;
+        }
+
+        .small-text {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 12px;
+        }
+
+        .emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .progress {
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .expired-msg {
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Progress Bar -->
+        <div class="progress">
+            <div class="progress-bar" id="progressBar" style="width: 16.67%"></div>
+        </div>
+
+        <!-- Step 1: Início -->
+        <div class="step active" id="step1">
+            <div class="emoji">⚠️</div>
+            <h1>Excluir sua conta?</h1>
+            <p>Esta ação é permanente e não pode ser desfeita. Todos os seus dados serão removidos de nossos sistemas.
+            </p>
+            <button class="btn-danger" onclick="nextStep(2)">Sim, quero excluir</button>
+            <button class="btn-secondary" onclick="location.reload()">Cancelar</button>
+        </div>
+
+        <!-- Step 2: Verificação de Identidade -->
+        <div class="step" id="step2">
+            <div class="emoji">🔐</div>
+            <h1>Confirme sua identidade</h1>
+            <p>Digite seu nome completo exatamente como foi cadastrado:</p>
+            <input type="text" id="nameInput" placeholder="Nome completo">
+            <button class="btn-primary" onclick="verifyName()">Confirmar identidade</button>
+            <p class="small-text">⚠️ A verificação é sensível a maiúsculas, acentos e espaços.</p>
+        </div>
+
+        <!-- Step 3: Alerta de Risco -->
+        <div class="step" id="step3">
+            <div class="emoji">🚨</div>
+            <h1>Ação irreversível</h1>
+            <div class="alert">
+                <strong>⚠️ ATENÇÃO</strong><br><br>
+                Esta ação não pode ser desfeita. Todos os seus dados, incluindo histórico, preferências e configurações
+                serão eliminados permanentemente de nossos servidores.
+            </div>
+            <button class="btn-danger" onclick="nextStep(4)">Entendo e aceito os riscos</button>
+        </div>
+
+        <!-- Step 4: Cupom de Retenção -->
+        <div class="step" id="step4">
+            <div class="emoji">😢</div>
+            <h1>Espere um momento!</h1>
+            <p>Antes de você ir, temos uma oferta especial para você:</p>
+            <div class="coupon-box">
+                <div style="color: #744210; font-weight: 600;">🎁 Cupom de desconto exclusivo</div>
+                <div class="coupon-code">NAOEXCLUIR10</div>
+                <div style="color: #744210; font-size: 14px;">10% de desconto em qualquer plano</div>
+            </div>
+            <button class="btn-primary" onclick="keepAccount()">Manter minha conta</button>
+            <button class="btn-danger" id="continueBtn" disabled onclick="nextStep(5)">Continuar com a exclusão</button>
+            <p class="small-text" id="waitText">Aguarde <span id="waitTimer">5</span>s para continuar...</p>
+        </div>
+
+        <!-- Step 5: Captcha -->
+        <div class="step" id="step5">
+            <div class="emoji">🤖</div>
+            <h1>Verificação de segurança</h1>
+            <p>Confirme que você não é um robô:</p>
+            <div class="captcha" id="captchaBox" onclick="checkCaptcha()">
+                <div class="captcha-checkbox" id="captchaCheckbox"></div>
+                <div>
+                    <strong style="color: #2d3748;">Eu não sou um robô</strong><br>
+                    <small style="color: #718096;">Clique para verificar</small>
+                </div>
+            </div>
+            <button class="btn-primary" id="captchaBtn" disabled onclick="nextStep(6)">Continuar</button>
+        </div>
+
+        <!-- Step 6: Countdown Final -->
+        <div class="step" id="step6">
+            <div class="emoji">⏰</div>
+            <h1>Confirmação final</h1>
+            <div class="countdown">
+                <div style="font-size: 14px; opacity: 0.9;">Tempo restante para certificação</div>
+                <div class="countdown-time" id="countdownTime">24:00:00</div>
+                <div style="font-size: 14px; opacity: 0.9;">O botão será habilitado após este período</div>
+            </div>
+            <button class="btn-danger" id="finalBtn" disabled>Confirmar exclusão permanente</button>
+            <div class="expired-msg hidden" id="expiredMsg">
+                ⚠️ Tempo expirado! A certificação não foi concluída.
+            </div>
+            <button class="btn-secondary hidden" id="restartBtn" onclick="restart()">Reiniciar processo</button>
+        </div>
+    </div>
+
+    <script>
+        const HARDCODED_NAME = "Gean";
+        const SECONDS_24H = 24 * 60 * 60;
+        let currentStep = 1;
+        let captchaAttempts = 0;
+        let countdownInterval;
+        let nameConfirmCount = 0;
+
+        function nextStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+
+            if (step === 4) startWaitTimer();
+            if (step === 6) startCountdown();
+        }
+
+        function updateProgress() {
+            const progress = (currentStep / 6) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function verifyName() {
+            const name = document.getElementById('nameInput').value.trim();
+
+            if (name !== HARDCODED_NAME) {
+                alert('❌ Nome incorreto! Verifique e tente novamente.');
+                document.getElementById('nameInput').value = '';
+                return;
+            }
+
+            nameConfirmCount++;
+
+            if (nameConfirmCount === 1) {
+                alert('⚠️ Por motivos legais, confirme novamente digitando seu nome mais uma vez.');
+                document.getElementById('nameInput').value = '';
+                return;
+            }
+
+            nextStep(3);
+        }
+
+        function startWaitTimer() {
+            let seconds = 5;
+            const btn = document.getElementById('continueBtn');
+            const text = document.getElementById('waitText');
+            const timer = document.getElementById('waitTimer');
+
+            const interval = setInterval(() => {
+                seconds--;
+                timer.textContent = seconds;
+
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    btn.disabled = false;
+                    text.textContent = '✓ Você pode prosseguir agora';
+                    text.style.color = '#48bb78';
+                }
+            }, 1000);
+        }
+
+        function keepAccount() {
+            alert('🎉 Cupom aplicado com sucesso! Que bom que você ficou!');
+            location.reload();
+        }
+
+        function checkCaptcha() {
+            captchaAttempts++;
+            const checkbox = document.getElementById('captchaCheckbox');
+            const btn = document.getElementById('captchaBtn');
+
+            if (captchaAttempts === 1) {
+                alert('❌ Falha na verificação. Tente novamente.');
+                return;
+            }
+
+            checkbox.classList.add('checked');
+            checkbox.textContent = '✓';
+            btn.disabled = false;
+
+            // Quando avançar para o step 6, iniciar o monitoramento do mouse
+            const originalOnClick = btn.onclick;
+            btn.onclick = () => {
+                originalOnClick();
+                setTimeout(() => {
+                    alert('⚠️ ATENÇÃO: A partir de agora, você NÃO PODE MOVER O MOUSE durante todo o período de 24 horas. Qualquer movimento reiniciará todo o processo desde o início!');
+                    startMouseMonitoring();
+                }, 300);
+            };
+        }
+
+        function startMouseMonitoring() {
+            let mouseTimeout;
+
+            const monitorMouse = () => {
+                clearTimeout(mouseTimeout);
+
+                // Mostra alerta de falha
+                alert('❌ VOCÊ MOVEU O MOUSE! O processo será reiniciado.');
+
+                // Reinicia tudo
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            };
+
+            // Adiciona o listener de movimento do mouse
+            document.addEventListener('mousemove', monitorMouse);
+
+            // Salva o listener para poder remover depois (se necessário)
+            window.mouseMonitorActive = true;
+        }
+
+        function startCountdown() {
+            const endTime = Date.now() + (SECONDS_24H * 1000);
+
+            countdownInterval = setInterval(() => {
+                const remaining = endTime - Date.now();
+
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('countdownTime').textContent = '00:00:00';
+                    document.getElementById('expiredMsg').classList.remove('hidden');
+                    document.getElementById('restartBtn').classList.remove('hidden');
+                    return;
+                }
+
+                const hours = Math.floor(remaining / 3600000);
+                const minutes = Math.floor((remaining % 3600000) / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+
+                document.getElementById('countdownTime').textContent =
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function restart() {
+            location.reload();
+        }
+    </script>
+</body>
+
+</html>
